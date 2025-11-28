@@ -10,9 +10,18 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withCount('books')->paginate(10);
+        $query = Category::withCount('books');
+
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%");
+        }
+
+        $categories = $query->paginate(10);
         return view('Manajemen.Kategori', compact('categories'));
     }
 
@@ -21,7 +30,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('Manajemen.Kategori');
+        return view('Manajemen.category_create');
     }
 
     /**
@@ -44,7 +53,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('Manajemen.Kategori', compact('category'));
+        return view('Manajemen.category_show', compact('category'));
     }
 
     /**
@@ -52,7 +61,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('Manajemen.Kategori', compact('category'));
+        return view('Manajemen.category_edit', compact('category'));
     }
 
     /**

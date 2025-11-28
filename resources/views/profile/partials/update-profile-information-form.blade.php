@@ -47,6 +47,42 @@
             @endif
         </div>
 
+        @if($user->isMahasiswa() && $user->member)
+        <div class="border-t pt-6">
+            <h3 class="text-md font-medium text-gray-900 mb-4">{{ __('Member Information') }}</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <x-input-label for="phone" :value="__('Phone Number')" />
+                    <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->member->phone)" autocomplete="tel" />
+                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                </div>
+
+                <div>
+                    <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
+                    <x-text-input id="date_of_birth" name="date_of_birth" type="date" class="mt-1 block w-full" :value="old('date_of_birth', $user->member->date_of_birth ? $user->member->date_of_birth->format('Y-m-d') : '')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('date_of_birth')" />
+                </div>
+
+                <div>
+                    <x-input-label for="gender" :value="__('Gender')" />
+                    <select id="gender" name="gender" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                        <option value="">{{ __('Select Gender') }}</option>
+                        <option value="male" {{ old('gender', $user->member->gender) == 'male' ? 'selected' : '' }}>{{ __('Male') }}</option>
+                        <option value="female" {{ old('gender', $user->member->gender) == 'female' ? 'selected' : '' }}>{{ __('Female') }}</option>
+                    </select>
+                    <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <x-input-label for="address" :value="__('Address')" />
+                    <textarea id="address" name="address" rows="3" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" autocomplete="address">{{ old('address', $user->member->address) }}</textarea>
+                    <x-input-error class="mt-2" :messages="$errors->get('address')" />
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

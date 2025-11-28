@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->date('return_date')->nullable();
             $table->decimal('fine', 8, 2)->default(0);
-            $table->enum('status', ['active', 'returned', 'overdue'])->default('active');
+            $table->enum('status', ['active', 'returned', 'overdue', 'pending', 'approved', 'rejected'])->default('active');
             $table->text('notes')->nullable();
             $table->timestamps();
         });

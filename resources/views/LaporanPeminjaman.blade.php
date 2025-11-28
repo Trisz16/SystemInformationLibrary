@@ -1,14 +1,23 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Laporan Peminjaman') }}
-            </h2>
+            <div>
+                <h2 class="font-bold text-2xl text-gray-900 leading-tight">
+                    {{ __('Laporan Peminjaman') }}
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">Laporan lengkap peminjaman buku perpustakaan Azfakun</p>
+            </div>
             <div class="flex space-x-2">
                 <button id="export-pdf" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                     Export PDF
                 </button>
                 <button id="export-excel" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                     Export Excel
                 </button>
             </div>
@@ -20,30 +29,33 @@
             <!-- Filter Section -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <form method="GET" action="{{ route('reports.loans') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
-                            <input type="date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                            <input type="date" id="start_date" name="start_date" value="{{ request('start_date') }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Tanggal Akhir</label>
-                            <input type="date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal Akhir</label>
+                            <input type="date" id="end_date" name="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Status</label>
-                            <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                <option>Semua Status</option>
-                                <option>Aktif</option>
-                                <option>Dikembalikan</option>
-                                <option>Terlambat</option>
+                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <select id="status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Dikembalikan</option>
+                                <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Terlambat</option>
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
                                 Filter
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -61,7 +73,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Total Peminjaman</div>
-                                <div class="text-2xl font-bold text-gray-900">1,247</div>
+                                <div class="text-2xl font-bold text-gray-900">{{ $totalLoans ?? 0 }}</div>
                             </div>
                         </div>
                     </div>
@@ -79,7 +91,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Dikembalikan</div>
-                                <div class="text-2xl font-bold text-gray-900">1,089</div>
+                                <div class="text-2xl font-bold text-gray-900">{{ $returnedLoans ?? 0 }}</div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +109,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Aktif</div>
-                                <div class="text-2xl font-bold text-gray-900">158</div>
+                                <div class="text-2xl font-bold text-gray-900">{{ $activeLoans ?? 0 }}</div>
                             </div>
                         </div>
                     </div>
@@ -115,7 +127,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Terlambat</div>
-                                <div class="text-2xl font-bold text-gray-900">23</div>
+                                <div class="text-2xl font-bold text-gray-900">{{ $overdueLoans ?? 0 }}</div>
                             </div>
                         </div>
                     </div>
@@ -157,120 +169,121 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Report Row 1 -->
+                            @forelse($loans ?? [] as $loan)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">L-2023-001</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $loan->loan_code ?? 'L-' . date('Y') . '-' . str_pad($loan->id, 3, '0', STR_PAD_LEFT) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">John Doe</div>
-                                    <div class="text-sm text-gray-500">LIB-2023-001</div>
+                                    <div class="text-sm text-gray-900">{{ $loan->member->name ?? 'N/A' }}</div>
+                                    <div class="text-sm text-gray-500">{{ $loan->member->member_code ?? 'N/A' }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Laravel for Beginners</div>
-                                    <div class="text-sm text-gray-500">978-1234567890</div>
+                                    <div class="text-sm text-gray-900">{{ $loan->book->title ?? 'N/A' }}</div>
+                                    <div class="text-sm text-gray-500">{{ $loan->book->isbn ?? 'N/A' }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">29 Nov 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loan->loan_date ? $loan->loan_date->format('d M Y') : 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loan->return_date ? $loan->return_date->format('d M Y') : 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Dikembalikan</span>
+                                    @if($loan->status == 'returned')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Dikembalikan</span>
+                                    @elseif($loan->status == 'active')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Aktif</span>
+                                    @elseif($loan->status == 'overdue')
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Terlambat</span>
+                                    @else
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ ucfirst($loan->status ?? 'N/A') }}</span>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    @if($loan->fine_amount > 0)
+                                        <span class="text-red-600 font-medium">Rp {{ number_format($loan->fine_amount, 0, ',', '.') }}</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                             </tr>
-
-                            <!-- Report Row 2 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">L-2023-002</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Jane Smith</div>
-                                    <div class="text-sm text-gray-500">LIB-2023-002</div>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    Tidak ada data peminjaman ditemukan.
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">PHP Advanced Techniques</div>
-                                    <div class="text-sm text-gray-500">978-0987654321</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">24 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Terlambat</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium">Rp 15.000</td>
                             </tr>
-
-                            <!-- Report Row 3 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">L-2023-003</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Mike Johnson</div>
-                                    <div class="text-sm text-gray-500">LIB-2023-003</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">The Great Gatsby</div>
-                                    <div class="text-sm text-gray-500">978-0743273565</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">05 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">19 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Dikembalikan</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
-                            </tr>
-
-                            <!-- Report Row 4 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">L-2023-004</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Sarah Brown</div>
-                                    <div class="text-sm text-gray-500">LIB-2023-004</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">JavaScript Essentials</div>
-                                    <div class="text-sm text-gray-500">978-1122334455</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">20 Nov 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">04 Dec 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
-                        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Showing <span class="font-medium">1</span> to <span class="font-medium">4</span> of <span class="font-medium">1,247</span> results
-                            </p>
+                @if(isset($loans) && $loans->hasPages())
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            @if ($loans->onFirstPage())
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">Previous</span>
+                            @else
+                                <a href="{{ $loans->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+                            @endif
+                            @if ($loans->hasMorePages())
+                                <a href="{{ $loans->nextPageUrl() }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
+                            @else
+                                <span class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">Next</span>
+                            @endif
                         </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 01-.001-1.414l4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">3</a>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">125</a>
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01.001 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </nav>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span class="font-medium">{{ $loans->firstItem() }}</span> to <span class="font-medium">{{ $loans->lastItem() }}</span> of <span class="font-medium">{{ $loans->total() }}</span> results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                    @if ($loans->onFirstPage())
+                                        <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 01-.001-1.414l4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                    @else
+                                        <a href="{{ $loans->previousPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 01-.001-1.414l4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    @endif
+
+                                    @foreach ($loans->getUrlRange(1, $loans->lastPage()) as $page => $url)
+                                        @if ($page == $loans->currentPage())
+                                            <span aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ $page }}</span>
+                                        @else
+                                            <a href="{{ $url }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ $page }}</a>
+                                        @endif
+                                    @endforeach
+
+                                    @if ($loans->hasPages() && $loans->currentPage() < $loans->lastPage() - 2)
+                                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">...</span>
+                                        <a href="{{ $loans->url($loans->lastPage()) }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ $loans->lastPage() }}</a>
+                                    @endif
+
+                                    @if ($loans->hasMorePages())
+                                        <a href="{{ $loans->nextPageUrl() }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01.001 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    @else
+                                        <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 01.001 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                    @endif
+                                </nav>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -281,6 +294,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
+    // Chart data from PHP
+    const chartData = @json($chartData);
+
         // Loan Status Chart
         const loanStatusCtx = document.getElementById('loanStatusChart').getContext('2d');
         const loanStatusChart = new Chart(loanStatusCtx, {
@@ -288,7 +304,7 @@
             data: {
                 labels: ['Dikembalikan', 'Aktif', 'Terlambat'],
                 datasets: [{
-                    data: [1089, 158, 23],
+                    data: [chartData.returned, chartData.active, chartData.overdue],
                     backgroundColor: [
                         'rgba(34, 197, 94, 0.8)',
                         'rgba(251, 191, 36, 0.8)',
@@ -320,7 +336,7 @@
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
                     label: 'Peminjaman',
-                    data: [85, 92, 78, 105, 120, 98, 110, 135, 125, 140, 158, 165],
+                    data: chartData.monthly,
                     borderColor: 'rgba(59, 130, 246, 1)',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     borderWidth: 3,
@@ -393,22 +409,22 @@
             doc.setTextColor(0, 0, 0);
             doc.text('Total Peminjaman', 25, 108);
             doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
-            doc.text('1,247', 25, 115);
+            doc.text('{{ $totalLoans ?? 0 }}', 25, 115);
 
             doc.setTextColor(0, 0, 0);
             doc.text('Dikembalikan', 65, 108);
             doc.setTextColor(34, 197, 94);
-            doc.text('1,089', 65, 115);
+            doc.text('{{ $returnedLoans ?? 0 }}', 65, 115);
 
             doc.setTextColor(0, 0, 0);
             doc.text('Aktif', 105, 108);
             doc.setTextColor(251, 191, 36);
-            doc.text('158', 105, 115);
+            doc.text('{{ $activeLoans ?? 0 }}', 105, 115);
 
             doc.setTextColor(0, 0, 0);
             doc.text('Terlambat', 145, 108);
             doc.setTextColor(239, 68, 68);
-            doc.text('23', 145, 115);
+            doc.text('{{ $overdueLoans ?? 0 }}', 145, 115);
 
             // Table Section
             doc.setFontSize(14);
@@ -437,12 +453,7 @@
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(8);
 
-            const tableData = [
-                ['L-2023-001', 'John Doe', 'Laravel for Beginners', '15 Nov 2023', '29 Nov 2023', 'Dikembalikan'],
-                ['L-2023-002', 'Jane Smith', 'PHP Advanced Tech.', '10 Nov 2023', '24 Nov 2023', 'Terlambat'],
-                ['L-2023-003', 'Mike Johnson', 'The Great Gatsby', '05 Nov 2023', '19 Nov 2023', 'Dikembalikan'],
-                ['L-2023-004', 'Sarah Brown', 'JavaScript Essentials', '20 Nov 2023', '04 Dec 2023', 'Aktif']
-            ];
+            const tableData = @json($loanItems ?? []);
 
             tableData.forEach((row, rowIndex) => {
                 // Alternate row colors
@@ -452,13 +463,17 @@
                 }
 
                 xPos = 20;
-                row.forEach((cell, index) => {
-                    // Truncate long text
-                    let displayText = cell;
-                    if (cell.length > 15 && index === 2) { // Book title
-                        displayText = cell.substring(0, 15) + '...';
-                    }
-                    doc.text(displayText, xPos + 2, yPosition);
+                const loanCode = row.loan_code || 'L-' + new Date().getFullYear() + '-' + String(row.id).padStart(3, '0');
+                const memberName = row.member ? row.member.name : 'N/A';
+                const bookTitle = row.book ? (row.book.title ? row.book.title.substring(0, 20) + (row.book.title.length > 20 ? '...' : '') : 'N/A') : 'N/A';
+                const loanDate = row.loan_date ? new Date(row.loan_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+                const returnDate = row.return_date ? new Date(row.return_date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+                const status = row.status === 'returned' ? 'Dikembalikan' : (row.status === 'active' ? 'Aktif' : (row.status === 'overdue' ? 'Terlambat' : (row.status ? row.status.charAt(0).toUpperCase() + row.status.slice(1) : 'N/A')));
+
+                const rowData = [loanCode, memberName, bookTitle, loanDate, returnDate, status];
+
+                rowData.forEach((cell, index) => {
+                    doc.text(cell, xPos + 2, yPosition);
                     xPos += colWidths[index];
                 });
                 yPosition += 6;
@@ -468,7 +483,7 @@
             doc.setFontSize(8);
             doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
             doc.text('Dokumen ini dihasilkan secara otomatis oleh Sistem Informasi Perpustakaan Azfakun', 20, 280);
-            doc.text('© 2023 Perpustakaan Azfakun - Semua hak dilindungi undang-undang', 20, 285);
+            doc.text('© {{ date('Y') }} Perpustakaan Azfakun - Semua hak dilindungi undang-undang', 20, 285);
 
             // Save the PDF
             doc.save(`laporan_peminjaman_${dateStr.replace(/\s/g, '_')}.pdf`);
@@ -480,22 +495,7 @@
             const wb = XLSX.utils.book_new();
 
             // Create info sheet
-            const infoData = [
-                ['PERPUSTAKAAN AZFAKUN'],
-                ['Jl. Aladin, No. 777, Kota Atlantis'],
-                ['Telp: (021) 12345678 | Email: info@azfakun.library.id'],
-                [''],
-                ['LAPORAN PEMINJAMAN BUKU'],
-                [`Tanggal: ${new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}`],
-                [''],
-                ['RINGKASAN STATISTIK'],
-                ['Total Peminjaman', '1,247'],
-                ['Dikembalikan', '1,089'],
-                ['Aktif', '158'],
-                ['Terlambat', '23'],
-                [''],
-                ['DETAIL PEMINJAMAN']
-            ];
+            const infoData = @json($infoData ?? []);
 
             const infoWs = XLSX.utils.aoa_to_sheet(infoData);
 
@@ -516,20 +516,14 @@
             ];
 
             // Create data sheet with detailed loan information
-            const data = [
-                ['ID Peminjaman', 'ID Anggota', 'Nama Anggota', 'Email Anggota', 'ISBN Buku', 'Judul Buku', 'Kategori Buku', 'Pengarang', 'Penerbit', 'Tahun Terbit', 'Tanggal Pinjam', 'Tanggal Harus Kembali', 'Tanggal Dikembalikan', 'Durasi Pinjam (hari)', 'Status', 'Denda', 'Petugas', 'Catatan'],
-                ['L-2023-001', 'LIB-2023-001', 'John Doe', 'john.doe@email.com', '978-1234567890', 'Laravel for Beginners', 'Programming', 'John Smith', 'Tech Books Inc', '2022', '15 Nov 2023', '29 Nov 2023', '29 Nov 2023', '14', 'Dikembalikan', '-', 'Admin User', 'Buku dalam kondisi baik'],
-                ['L-2023-002', 'LIB-2023-002', 'Jane Smith', 'jane.smith@email.com', '978-0987654321', 'PHP Advanced Techniques', 'Programming', 'Jane Developer', 'Code Masters', '2021', '10 Nov 2023', '24 Nov 2023', '26 Nov 2023', '16', 'Terlambat', 'Rp 15.000', 'Librarian Bob', 'Terlambat 2 hari'],
-                ['L-2023-003', 'LIB-2023-003', 'Mike Johnson', 'mike.johnson@email.com', '978-0743273565', 'The Great Gatsby', 'Fiction', 'F. Scott Fitzgerald', 'Scribner', '1925', '05 Nov 2023', '19 Nov 2023', '19 Nov 2023', '14', 'Dikembalikan', '-', 'Staff Charlie', 'Buku klasik'],
-                ['L-2023-004', 'LIB-2023-004', 'Sarah Brown', 'sarah.brown@email.com', '978-1122334455', 'JavaScript Essentials', 'Programming', 'Sarah Wilson', 'JS Press', '2023', '20 Nov 2023', '04 Dec 2023', '-', '14', 'Aktif', '-', 'Admin User', 'Peminjaman aktif']
-            ];
+            const excelData = @json($excelData ?? []);
 
-            const dataWs = XLSX.utils.aoa_to_sheet(data);
+            const dataWs = XLSX.utils.aoa_to_sheet(excelData);
 
-            // Set column widths for detailed data sheet
+            // Set column widths for data sheet
             dataWs['!cols'] = [
                 {wch: 15}, // ID Peminjaman
-                {wch: 15}, // ID Anggota
+                {wch: 12}, // ID Anggota
                 {wch: 20}, // Nama Anggota
                 {wch: 25}, // Email Anggota
                 {wch: 15}, // ISBN Buku
@@ -540,25 +534,20 @@
                 {wch: 12}, // Tahun Terbit
                 {wch: 15}, // Tanggal Pinjam
                 {wch: 18}, // Tanggal Harus Kembali
-                {wch: 15}, // Tanggal Dikembalikan
-                {wch: 18}, // Durasi Pinjam
+                {wch: 18}, // Tanggal Dikembalikan
+                {wch: 18}, // Durasi Pinjam (hari)
                 {wch: 12}, // Status
-                {wch: 12}, // Denda
+                {wch: 10}, // Denda
                 {wch: 15}, // Petugas
-                {wch: 25}  // Catatan
+                {wch: 20}  // Catatan
             ];
 
-            // Add worksheets to workbook
-            XLSX.utils.book_append_sheet(wb, infoWs, 'Info & Statistik');
+            // Add sheets to workbook
+            XLSX.utils.book_append_sheet(wb, infoWs, 'Info');
             XLSX.utils.book_append_sheet(wb, dataWs, 'Data Peminjaman');
 
-            // Save the file
-            const dateStr = new Date().toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }).replace(/\s/g, '_');
-            XLSX.writeFile(wb, `laporan_peminjaman_azfakun_${dateStr}.xlsx`);
+            // Save the Excel file
+            XLSX.writeFile(wb, `laporan_peminjaman_${new Date().toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-')}.xlsx`);
         });
     </script>
 </x-app-layout>

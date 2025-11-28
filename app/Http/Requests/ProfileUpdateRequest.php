@@ -15,7 +15,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
@@ -26,5 +26,17 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
         ];
+
+        // Add member validation rules for mahasiswa
+        if ($this->user()->isMahasiswa()) {
+            $rules = array_merge($rules, [
+                'phone' => ['nullable', 'string', 'max:20'],
+                'date_of_birth' => ['nullable', 'date', 'before:today'],
+                'gender' => ['nullable', 'in:male,female'],
+                'address' => ['nullable', 'string', 'max:500'],
+            ]);
+        }
+
+        return $rules;
     }
 }

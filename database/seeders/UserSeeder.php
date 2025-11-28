@@ -30,12 +30,25 @@ class UserSeeder extends Seeder
             'role' => 'staff',
         ]);
 
-        // Create student user
-        User::create([
-            'name' => 'Student User',
+        // Create mahasiswa user
+        $mahasiswa = User::create([
+            'name' => 'Mahasiswa User',
             'email' => 'mahasiswa@example.com',
             'password' => Hash::make('password'),
-            'role' => 'student',
+            'role' => 'mahasiswa',
+        ]);
+
+        // Create member record for mahasiswa user
+        \App\Models\Member::create([
+            'user_id' => $mahasiswa->id,
+            'name' => $mahasiswa->name,
+            'email' => $mahasiswa->email,
+            'phone' => '081234567890',
+            'address' => 'Jl. Mahasiswa No. 123, Kota Universitas',
+            'date_of_birth' => '2000-01-01',
+            'gender' => 'male',
+            'status' => 'active',
+            'membership_date' => now(),
         ]);
     }
 }

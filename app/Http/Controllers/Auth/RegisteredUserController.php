@@ -39,12 +39,14 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'mahasiswa', // Automatic role assignment for new registrations
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect to member registration for mahasiswa users
+        return redirect(route('member.registration', absolute: false))->with('success', 'Registration successful! Please complete your member profile to access all features.');
     }
 }

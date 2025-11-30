@@ -46,7 +46,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Redirect to member registration for mahasiswa users
-        return redirect(route('member.registration', absolute: false))->with('success', 'Registration successful! Please complete your member profile to access all features.');
+        // After registration, require email verification before accessing dashboard
+        // Send the user to the verification notice page
+        return redirect()->route('verification.notice')->with('success', 'Registration successful! Please verify your email before accessing the dashboard.');
     }
 }
